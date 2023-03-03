@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+
+    <title>Oracle Geocoding sample application</title>
+
+
+	<link rel="shortcut icon" type="image/x-icon" href="docs/images/favicon.ico" />
+
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css" integrity="sha256-kLaT2GOSpHechhsozzB+flnD+zUyjE2LlfWPgU04xyI=" crossorigin=""/>
+    <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js" integrity="sha256-WBkoXOwTeyKclOHuWtc+i2uENFpDZ9YPdf5Hf+D7ewM=" crossorigin=""></script>
+
+	<style>
+		html, body {
+			height: 100%;
+			margin: 0;
+		}
+		.leaflet-container {
+			height: 400px;
+			width: 600px;
+			max-width: 100%;
+			max-height: 100%;
+		}
+	</style>
+
+
+</head>
+
+<body>
+    <div class="container">
+        <div class="geocoder" style="width: 800px">
+            <h3>Enter address to geocode</h3>
+            <div id="query-section">
+                <label for="street">Street:</label>
+                <input type="text" id="street" value="Paseo de la Castellana 81" /><br>
+                <label for="city">City:</label>
+                <input type="text" id="city" value="Madrid" /><br>
+                <label for="region">Region:</label>
+                <input type="text" id="region" value="Comunidad de Madrid" /><br>
+                <label for="zip">Zip code:</label>
+                <input type="text" id="zip" value="28046" /><br>
+                <label for="country">Country:</label>
+                <input type="text" id="country" value="Spain" /><br>
+                <button id="query">Query</button>
+            </div>
+        </div>
+    </div>
+    <div id="map" style="width: 800px; height: 500px;"></div>
+
+    <script>
+
+        const streetInput = document.getElementById('street');
+        const cityInput = document.getElementById('city');
+        const regionInput = document.getElementById('region');
+        const zipInput = document.getElementById('zip');
+        const countryInput = document.getElementById('country');
+        const queryBtn = document.getElementById('query');
+        let map = null;
+
+        queryBtn.onclick = () => {
+            queryBtn.disabled = true;
+            fetch('/geocode/query?street=' + streetInput.value + "&city=" + cityInput.value +
+                "&region=" + regionInput.value + "&zipcode=" + zipInput.value +
+                "&country=" + countryInput.value).then((response) => {
+                    return response.json();
+                }).then((json) => {
+
+                    if (map) {
+                        map.off();
+                        map.remove();
+                    }
+
+                    map = L.map('map').setView([json[0].y, json[0].x], 15);
+
+                    const tiles = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                        maxZoom: 19,
+                        attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+                    }).addTo(map);
+                    var marker = L.marker([json[0].y, json[0].x]).addTo(map)
+                    .bindPopup('<b>'+streetInput.value+'</b><br />'+cityInput.value).openPopup();;
+
+                    queryBtn.disabled = false;
+                    console.log(json);
+                });
+        };
+
+
+
+    </script>
+
+</body>
+
+</html>
