@@ -32,7 +32,7 @@ public class GeocodingController {
   
     @Get("/query")
     @Produces(MediaType.APPLICATION_JSON)
-    public String getDirects(@QueryValue String street, @QueryValue String city, 
+    public String getGeocoding(@QueryValue String street, @QueryValue String city, 
                              @QueryValue String region, @QueryValue String zipcode, 
                              @QueryValue String country) {
 
