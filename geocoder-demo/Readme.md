@@ -1,9 +1,12 @@
 ## Geocoder Demo Documentation
 
+
+NOTE: This demo depends on an Oracle Spatial installation with cartography from one of the supported providers, like Here or TomTom (free sample available here https://www.tomtom.com/map-data-for-oracle-spatial/).
+
 Execute with:
 
 ``` 
- ./gradlew run --args='-oracle.map-server.url=http://maps.oracle.com'
+ ./gradlew run --args='-oracle.map-server.url=http://your.oracle.spatial.server.com'
 ``` 
 
 
@@ -25,7 +28,7 @@ export DOCKER_HOST=unix:///run/user/54321/podman/podman.sock
 To run this docker image and pass the arguments:
 
 ``` 
-docker run --name geocoder-demo -p8080:8080 -e oracle.map-server.url=http://maps.oracle.com localhost/demo:latest
+docker run --name geocoder-demo -p8080:8080 -e oracle.map-server.url=http://your.oracle.spatial.server.com localhost/demo:latest
 ``` 
 
 To use graalvm, set the enviroment variables correctly before running gradle:
