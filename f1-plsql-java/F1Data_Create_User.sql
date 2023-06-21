@@ -12,12 +12,12 @@
  * Remarks  : Run this script as the admin user
  */
 
-ALTER SESSION SET CONTAINER=APP_ROOT;
+ALTER SESSION SET CONTAINER=PDB1;
 
 drop user f1data cascade
 /
 
-create user f1data identified by "Formula1Database!"
+create user f1data identified by "Formula1Dxxxxx1"
 /
 alter user f1data enable editions
 /
