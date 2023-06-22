@@ -76,7 +76,6 @@ public class LapStats{
       
       try
       {
-        
         PreparedStatement pstmt = conn.prepareStatement(sql,ResultSet.TYPE_FORWARD_ONLY,ResultSet.CONCUR_READ_ONLY);
         
         long t1 = System.currentTimeMillis();
@@ -85,33 +84,57 @@ public class LapStats{
         
         int v_counter = 0;
         int v_counter_EU = 0;
-        int v_counter_noEU = 0;
+        int v_counter_AM = 0;
+        int v_counter_other = 0;
         float v_lap_sum_EU = 0;
-        float v_lap_sum_noEU = 0;
-
-        
+        float v_lap_sum_AM = 0;
+        float v_lap_sum_other = 0;
+       
         while (rset.next())
         {
             
          String n = rset.getString(5);
          float l = rset.getFloat(7);
-
          
          switch(n) {
-          case "British":
-          case "German":
-          case "Finnish": 
-          case "French": 
-          case "Spanish": 
-          case "Italian": 
-          case "Dutch":
-          case "Polish":
+            case "British":
+            case "German":
+            case "Spanish":
+            case "Finnish":
+            case "French":
+            case "Polish":
+            case "Italian":
+            case "Austrian":
+            case "Dutch":
+            case "Portuguese":
+            case "Irish":
+            case "Danish":
+            case "Hungarian":
+            case "Czech":
+            case "Swiss":
+            case "Belgian":
+            case "Monegasque":
+            case "Swedish":
+            case "East German":
+            case "Liechtensteiner":
               v_counter_EU = v_counter_EU+1;
               v_lap_sum_EU=v_lap_sum_EU + l/1000;
               break;
+            case "Canadian":
+            case "American":
+            case "Brazilian":
+            case "Colombian":
+            case "Argentine":
+            case "Venezuelan":
+            case "Chilean":
+            case "Mexican":
+            case "Uruguayan":
+              v_counter_AM = v_counter_AM+1;
+              v_lap_sum_AM = v_lap_sum_AM + l/1000;
+              break;            
           default:
-              v_counter_noEU = v_counter_noEU+1;
-              v_lap_sum_noEU=v_lap_sum_noEU + l/1000; 
+              v_counter_other = v_counter_other+1;
+              v_lap_sum_other=v_lap_sum_other + l/1000; 
          
          }
          v_counter=v_counter+1;
@@ -120,9 +143,9 @@ public class LapStats{
         rset.close();
   
         System.out.println( "EU lap (seconds) " + v_lap_sum_EU + ", races: "+ v_counter_EU );
-        System.out.println( "noEU lap (seconds) " + v_lap_sum_noEU + ", races: "+ v_counter_noEU );
+        System.out.println( "AM lap (seconds) " + v_lap_sum_EU + ", races: "+ v_counter_EU );
+        System.out.println( "Other lap (seconds) " + v_lap_sum_other + ", races: "+ v_counter_other );
         System.out.println( "Total races: " + v_counter + ".");
-  
         
         pstmt.close();
         System.out.println("iterate time ms: " + (System.currentTimeMillis()-t1));
